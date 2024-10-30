@@ -1,23 +1,14 @@
 # gauss_seidel.rb
-# Function for Gauss-Seidel Method in Ruby
+# Gauss-Seidel Method in Ruby
 
 def gauss_seidel(a, b, tolerance = 1e-6, max_iterations = 100)
-  # Gauss-Seidel method to solve Ax = b
-  #
-  # Args:
-  #   a: Coefficient matrix (2D array)
-  #   b: Constants vector (1D array)
-  #   tolerance: Convergence tolerance
-  #   max_iterations: Maximum iterations to try for convergence
-  #
-  # Returns:
-  #   Solution vector or nil if convergence is not achieved
+  # Initialize the solution vector with zeros
+  n = b.length
+  x = Array.new(n, 0.0)
 
-  n = b.size
-  x = Array.new(n, 0.0) # Initialize solution vector with zeros
-  
+  # Gauss-Seidel iteration
   max_iterations.times do
-    x_old = x.clone # Copy of previous solution for convergence check
+    x_old = x.clone
     
     n.times do |i|
       sum = b[i]
@@ -26,13 +17,13 @@ def gauss_seidel(a, b, tolerance = 1e-6, max_iterations = 100)
         sum -= a[i][j] * x[j] if i != j
       end
       
-      x[i] = sum / a[i][i] # Update the ith variable
+      x[i] = sum / a[i][i]
     end
     
     # Check for convergence
-    error = x.zip(x_old).map { |xi, x_old_i| (xi - x_old_i).abs }.sum
+    error = x.each_with_index.map { |xi, i| (xi - x_old[i]).abs }.sum
     return x if error < tolerance
   end
   
-  nil # Return nil if maximum iterations are reached without convergence
+  nil  # Return nil if the solution does not converge
 end
